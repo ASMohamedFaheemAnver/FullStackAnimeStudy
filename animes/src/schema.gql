@@ -1,0 +1,19 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type IconType {
+  type: String!
+}
+
+type Query {
+  _: String!
+}
+
+type Mutation {
+  emitChatIcon(type: String!): Boolean!
+}
+
+type Subscription {
+  getChatIconEmits: IconType!
+}
