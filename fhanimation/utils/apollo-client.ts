@@ -9,7 +9,7 @@ import {onError} from '@apollo/client/link/error';
 import {WebSocketLink} from '@apollo/client/link/ws';
 import {getMainDefinition} from '@apollo/client/utilities';
 import {SubscriptionClient} from 'subscriptions-transport-ws';
-import Constatns from './constatns';
+import Constatns from './constants';
 
 const httpLink = createHttpLink({
   uri: Constatns.APOLLO_HITPOINT_URL,
