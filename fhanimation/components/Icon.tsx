@@ -4,12 +4,13 @@ import {
   ColorValue,
   Dimensions,
   Easing,
+  Image,
+  ImageSourcePropType,
   StyleProp,
   StyleSheet,
   View,
   ViewStyle,
 } from 'react-native';
-import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
 
 const {height} = Dimensions.get('window');
 
@@ -19,7 +20,7 @@ const negativeEndY = animationEndY * -1;
 const FloatingIconContainer = (props: {
   style: StyleProp<ViewStyle>;
   onComplete: Function;
-  iconName: string;
+  icon: ImageSourcePropType;
 }) => {
   const [state, setState] = useState<{
     position: Animated.Value;
@@ -56,11 +57,7 @@ const FloatingIconContainer = (props: {
         {opacity: opacityAnimation, transform: [{translateY: state.position}]},
         props.style,
       ]}>
-      <FloatingIcon
-        iconName={props.iconName}
-        color="red"
-        style={styles.floatingIcon}
-      />
+      <FloatingIcon icon={props.icon} color="red" style={styles.floatingIcon} />
     </Animated.View>
   );
 };
@@ -68,11 +65,11 @@ const FloatingIconContainer = (props: {
 const FloatingIcon = (props: {
   style: StyleProp<ViewStyle>;
   color: ColorValue | number | undefined;
-  iconName: string;
+  icon: ImageSourcePropType;
 }) => {
   return (
     <View style={[props.style]}>
-      <FontAwesomeIcon color={props.color} size={25} name={props.iconName} />
+      <Image style={{height: 25, width: 25}} source={props.icon} />
     </View>
   );
 };

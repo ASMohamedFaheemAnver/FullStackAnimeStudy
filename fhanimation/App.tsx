@@ -2,16 +2,16 @@ import {gql} from '@apollo/client';
 import React from 'react';
 import {
   Dimensions,
+  Image,
   SafeAreaView,
   StyleSheet,
   TouchableOpacity,
   View,
 } from 'react-native';
-import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
 import FloatingIconContainer from './components/Icon';
 import apolloClient from './utils/apollo-client';
 
-let heartCount = 0;
+let emittedIconsCount = 0;
 let subscriptionPromis: ZenObservable.Subscription;
 
 class App extends React.Component {
@@ -39,13 +39,13 @@ class App extends React.Component {
     subscriptionPromis = apolloClient
       .subscribe({query: subscription})
       .subscribe(subRes => {
-        this.addHeart();
+        this.addIcon();
         // console.log({subRes});
       });
   }
 
-  state: {hearts: {id: number; right: number}[] | null} = {
-    hearts: null,
+  state: {emittedIcons: {id: number; right: number}[] | null} = {
+    emittedIcons: null,
   };
 
   getRandomNumber = (max: number, min: number) => {
@@ -66,51 +66,51 @@ class App extends React.Component {
     });
   }
 
-  addHeart = () => {
-    heartCount++;
+  addIcon = () => {
+    emittedIconsCount++;
     this.setState({
       ...this.state,
-      hearts:
-        this.state.hearts != null
+      emittedIcons:
+        this.state.emittedIcons != null
           ? [
-              ...this.state.hearts,
+              ...this.state.emittedIcons,
               {
-                id: heartCount,
+                id: emittedIconsCount,
                 right: this.getRandomNumber(0, Dimensions.get('window').width),
               },
             ]
           : [
               {
-                id: heartCount,
+                id: emittedIconsCount,
                 right: this.getRandomNumber(0, Dimensions.get('window').width),
               },
             ],
     });
   };
 
-  removeHeart = (id: number) => {
+  removeIcon = (id: number) => {
     this.setState({
       ...this.state,
-      hearts:
-        this.state.hearts != null
-          ? this.state.hearts.filter(heart => {
-              return heart.id !== id;
+      emittedIcons:
+        this.state.emittedIcons != null
+          ? this.state.emittedIcons.filter(icon => {
+              return icon.id !== id;
             })
-          : this.state.hearts,
+          : this.state.emittedIcons,
     });
   };
 
   render() {
     return (
       <SafeAreaView style={styles.container}>
-        {this.state.hearts?.map(heart => {
+        {this.state.emittedIcons?.map(icon => {
           return (
             <FloatingIconContainer
-              iconName="heart"
-              key={heart.id}
-              style={{right: heart.right}}
+              icon={require('./img/love.png')}
+              key={icon.id}
+              style={{right: icon.right}}
               onComplete={() => {
-                this.removeHeart(heart.id);
+                this.removeIcon(icon.id);
               }}
             />
           );
@@ -132,7 +132,10 @@ class App extends React.Component {
               borderRadius: 40,
               margin: 20,
             }}>
-            <FontAwesomeIcon color="red" size={25} name="heart" />
+            <Image
+              style={{height: 50, width: 50}}
+              source={require('./img/love.png')}
+            />
           </TouchableOpacity>
         </View>
       </SafeAreaView>
