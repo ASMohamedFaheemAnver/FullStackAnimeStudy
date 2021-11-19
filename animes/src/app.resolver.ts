@@ -13,7 +13,16 @@ export class AppResolver {
     return Constants.ENVIRONMENT;
   }
 
-  @Subscription((_) => IconType)
+  @Subscription((_) => IconType, {
+    filter: (payload, variables) => {
+      console.log({ payload, variables });
+      return true;
+    },
+    resolve: (payload, args, context, info) => {
+      console.log({ payload, args /*context, info*/ });
+      return payload.getChatIconEmits;
+    },
+  })
   getChatIconEmits() {
     return this.appService.getChatIconEmits();
   }
