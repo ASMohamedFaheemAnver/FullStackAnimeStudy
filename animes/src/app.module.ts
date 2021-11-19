@@ -7,6 +7,7 @@ import { AppService } from './app.service';
 @Module({
   imports: [
     GraphQLModule.forRoot({
+      debug: true,
       autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
       installSubscriptionHandlers: true,
     }),

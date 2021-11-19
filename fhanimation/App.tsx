@@ -1,3 +1,4 @@
+import {gql} from '@apollo/client';
 import React from 'react';
 import {
   Dimensions,
@@ -8,10 +9,41 @@ import {
 } from 'react-native';
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
 import FloatingIconContainer from './components/Icon';
+import apolloClient from './utils/apollo-client';
 
 let heartCount = 0;
+let subscriptionPromis: ZenObservable.Subscription;
 
 class App extends React.Component {
+  componentWillUnmount() {
+    console.log({emit: 'componentWillUnmount'});
+    subscriptionPromis.unsubscribe();
+  }
+
+  async componentDidMount() {
+    console.log({emit: 'componentDidMount'});
+    const query = gql`
+      query {
+        _
+      }
+    `;
+    const rootQueryRes = await apolloClient.query({query});
+    console.log({rootQueryRes});
+    const subscription = gql`
+      subscription {
+        getChatIconEmits {
+          type
+        }
+      }
+    `;
+    subscriptionPromis = apolloClient
+      .subscribe({query: subscription})
+      .subscribe(subRes => {
+        this.addHeart();
+        // console.log({subRes});
+      });
+  }
+
   state: {hearts: {id: number; right: number}[] | null} = {
     hearts: null,
   };
@@ -19,6 +51,20 @@ class App extends React.Component {
   getRandomNumber = (max: number, min: number) => {
     return Math.random() * (max - min) + min;
   };
+
+  async onIconClick() {
+    const mutation = gql`
+      mutation emitChatIcon($type: String!) {
+        emitChatIcon(type: $type)
+      }
+    `;
+    const res = await apolloClient.mutate({
+      mutation: mutation,
+      variables: {
+        type: 'heart',
+      },
+    });
+  }
 
   addHeart = () => {
     heartCount++;
@@ -76,7 +122,7 @@ class App extends React.Component {
             alignItems: 'center',
           }}>
           <TouchableOpacity
-            onPress={this.addHeart}
+            onPress={this.onIconClick}
             style={{
               height: 50,
               width: 50,

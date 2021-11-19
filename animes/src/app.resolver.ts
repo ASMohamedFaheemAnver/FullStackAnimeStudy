@@ -9,6 +9,7 @@ export class AppResolver {
 
   @Query((_) => String)
   _() {
+    console.log({ emit: '_' });
     return Constants.ENVIRONMENT;
   }
 
