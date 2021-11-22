@@ -31,14 +31,19 @@ class App extends React.Component {
     const rootQueryRes = await apolloClient.query({query});
     console.log({rootQueryRes});
     const subscription = gql`
-      subscription {
-        getChatIconEmits {
+      subscription ($env: String!) {
+        getChatIconEmits(env: $env) {
           type
         }
       }
     `;
     subscriptionPromis = apolloClient
-      .subscribe({query: subscription})
+      .subscribe({
+        query: subscription,
+        variables: {
+          env: 'udev',
+        },
+      })
       .subscribe(subRes => {
         this.addIcon(subRes.data?.getChatIconEmits?.type);
         console.log({type: subRes.data?.getChatIconEmits?.type});
@@ -55,7 +60,7 @@ class App extends React.Component {
 
   async onIconClick(type: string) {
     const mutation = gql`
-      mutation emitChatIcon($type: String!) {
+      mutation ($type: String!) {
         emitChatIcon(type: $type)
       }
     `;

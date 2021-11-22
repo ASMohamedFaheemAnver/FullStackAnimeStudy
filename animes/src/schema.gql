@@ -15,5 +15,5 @@ type Mutation {
 }
 
 type Subscription {
-  getChatIconEmits: IconType!
+  getChatIconEmits(env: String!): IconType!
 }

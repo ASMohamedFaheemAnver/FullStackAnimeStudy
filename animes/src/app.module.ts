@@ -10,6 +10,16 @@ import { AppService } from './app.service';
       debug: true,
       autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
       installSubscriptionHandlers: true,
+      subscriptions: {
+        'subscriptions-transport-ws': {
+          onConnect: (connectionParams, webSocket, context) => {
+            console.log({ connectionParams });
+          },
+          onDisconnect: (webSocket, context) => {
+            console.log({ context });
+          },
+        },
+      },
     }),
   ],
   controllers: [],

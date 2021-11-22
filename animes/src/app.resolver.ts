@@ -23,7 +23,7 @@ export class AppResolver {
       return payload.getChatIconEmits;
     },
   })
-  getChatIconEmits() {
+  getChatIconEmits(@Args('env') env: String) {
     return this.appService.getChatIconEmits();
   }
 
